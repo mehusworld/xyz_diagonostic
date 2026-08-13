@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XYZ Diagnostic Center — Appointment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --bg:#F6F8F7;
+  --surface:#FFFFFF;
+  --ink:#16231F;
+  --ink-soft:#4B5A55;
+  --teal-900:#0B3D3A;
+  --teal-800:#0F4A45;
+  --teal-700:#135E56;
+  --teal-500:#1C8A7A;
+  --mint-100:#E4F1EC;
+  --mint-200:#D3E7DF;
+  --amber-500:#F0A202;
+  --amber-600:#D48A00;
+  --coral:#E8542E;
+  --line:#DCE6E2;
+  --shadow: 0 8px 30px rgba(11,61,58,0.08);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Hind Siliguri','Inter',sans-serif;
+  min-height:100vh;
+  padding-bottom:60px;
+}
+.font-display{font-family:'Fraunces','Hind Siliguri',serif;}
+img,svg{display:block;}
+
+/* ---------------- HEADER ---------------- */
+header.top{
+  background: linear-gradient(135deg, var(--teal-900), var(--teal-700) 65%, var(--teal-500));
+  color:#fff;
+  padding:38px 24px 54px;
+  position:relative;
+  overflow:hidden;
+}
+.brand-row{
+  max-width:1080px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  position:relative; z-index:2;
+}
+.brand{
+  display:flex; align-items:center; gap:14px;
+}
+.brand .mark{
+  width:52px;height:52px;border-radius:14px;
+  background:rgba(255,255,255,0.14);
+  border:1px solid rgba(255,255,255,0.35);
+  display:flex;align-items:center;justify-content:center;
+}
+.brand h1{
+  font-family:'Fraunces',serif; font-weight:600; font-size:26px; letter-spacing:0.5px;
+}
+.brand .tag{font-size:12.5px; opacity:0.85; margin-top:2px; letter-spacing:0.4px;}
+.badge-row{display:flex; gap:10px; font-size:12.5px;}
+.badge-row span{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.3);
+  padding:6px 12px; border-radius:999px;
+}
+.hero-text{max-width:1080px;margin:34px auto 0; position:relative; z-index:2;}
+.hero-text h2{
+  font-family:'Fraunces',serif; font-weight:600; font-size:clamp(26px,4vw,38px); line-height:1.25; max-width:640px;
+}
+.hero-text p{margin-top:10px; opacity:0.88; max-width:560px; font-size:15px; line-height:1.7;}
+
+/* ECG signature line */
+.ecg-wrap{position:absolute; left:0; right:0; bottom:-2px; height:64px; z-index:1; opacity:0.9;}
+.ecg-line{
+  stroke:#ffffff; stroke-width:2; fill:none; opacity:0.55;
+  stroke-dasharray:1400; stroke-dashoffset:1400;
+  animation: draw 3.4s ease-out forwards;
+}
+@keyframes draw{ to{ stroke-dashoffset:0; } }
+
+/* ---------------- LAYOUT ---------------- */
+main{max-width:1080px; margin:-26px auto 0; padding:0 20px; position:relative; z-index:3;}
+.panel{
+  background:var(--surface);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--line);
+  padding:28px;
+  margin-bottom:22px;
+}
+.panel h3{
+  font-family:'Fraunces',serif; font-size:19px; font-weight:600; color:var(--teal-900);
+  display:flex; align-items:center; gap:10px; margin-bottom:4px;
+}
+.step-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--mint-100); color:var(--teal-700);
+  font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  font-family:'Inter',sans-serif;
+}
+.panel .sub{color:var(--ink-soft); font-size:13.5px; margin:6px 0 20px;}
+
+/* ---------------- FORM FIELDS ---------------- */
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+@media(max-width:640px){.grid-2{grid-template-columns:1fr;}}
+.field label{
+  display:block; font-size:13px; font-weight:600; color:var(--teal-900); margin-bottom:7px;
+}
+.field input[type=text], .field input[type=number], .field input[type=date]{
+  width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
+  font-family:inherit; font-size:14.5px; color:var(--ink); background:#FCFDFD;
+  transition:border-color .15s, box-shadow .15s;
+}
+.field input:focus{outline:none; border-color:var(--teal-500); box-shadow:0 0 0 3px rgba(28,138,122,0.12);}
+.gender-row{display:flex; gap:12px;}
+.gender-opt{
+  flex:1; border:1.5px solid var(--line); border-radius:10px; padding:11px 14px;
+  display:flex; align-items:center; gap:9px; cursor:pointer; font-size:14px; font-weight:500;
+  transition:all .15s; background:#FCFDFD;
+}
+.gender-opt input{accent-color:var(--teal-700); width:16px; height:16px;}
+.gender-opt.active{border-color:var(--teal-500); background:var(--mint-100); color:var(--teal-900);}
+
+/* ---------------- DOCTOR CARDS ---------------- */
+.doctor-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px;}
+.doc-card{
+  border:1.5px solid var(--line); border-radius:16px; padding:18px 16px; cursor:pointer;
+  background:#FCFDFD; transition:all .18s; position:relative; overflow:hidden;
+}
+.doc-card:hover{border-color:var(--teal-500); transform:translateY(-2px); box-shadow:0 10px 22px rgba(11,61,58,0.09);}
+.doc-card.selected{border-color:var(--teal-700); background:var(--mint-100); box-shadow:0 10px 22px rgba(11,61,58,0.13);}
+.doc-card.selected::after{
+  content:"✓ নির্বাচিত"; position:absolute; top:12px; right:12px; background:var(--teal-700); color:#fff;
+  font-size:10.5px; padding:3px 9px; border-radius:999px; font-weight:600;
+}
+.doc-avatar{width:64px; height:64px; border-radius:50%; margin-bottom:12px; background:#eee;}
+.doc-name{font-family:'Fraunces',serif; font-weight:600; font-size:16px; color:var(--teal-900);}
+.doc-spec{font-size:12.5px; color:var(--teal-700); font-weight:600; margin-top:2px;}
+.doc-meta{margin-top:11px; font-size:12px; color:var(--ink-soft); line-height:1.8; border-top:1px dashed var(--line); padding-top:10px;}
+.doc-meta b{color:var(--ink);}
+
+/* ---------------- SLOT AREA ---------------- */
+.slot-status{
+  margin-top:18px; padding:16px 18px; border-radius:12px; border:1.5px dashed var(--line);
+  font-size:13.5px; display:flex; align-items:center; gap:12px; background:#FCFDFD;
+}
+.slot-status.ok{border-color:var(--teal-500); background:var(--mint-100);}
+.slot-status.bad{border-color:var(--coral); background:#FDEEEA;}
+.dot{width:10px;height:10px;border-radius:50%; flex-shrink:0;}
+.dot.ok{background:var(--teal-500);}
+.dot.bad{background:var(--coral);}
+.slot-status b{font-size:16px;}
+
+/* visit type */
+.visit-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:6px;}
+@media(max-width:640px){.visit-grid{grid-template-columns:1fr;}}
+.visit-opt{
+  border:1.5px solid var(--line); border-radius:12px; padding:16px; cursor:pointer; background:#FCFDFD;
+  transition:all .15s;
+}
+.visit-opt:hover{border-color:var(--teal-500);}
+.visit-opt.selected{border-color:var(--amber-600); background:#FFF7E8;}
+.visit-opt .vt-title{font-weight:700; font-size:14.5px; color:var(--teal-900);}
+.visit-opt .vt-desc{font-size:12px; color:var(--ink-soft); margin:5px 0 10px; line-height:1.55;}
+.visit-opt .vt-price{font-family:'Fraunces',serif; font-size:20px; font-weight:600; color:var(--amber-600);}
+
+/* submit */
+.submit-row{display:flex; justify-content:flex-end; margin-top:6px;}
+.btn-primary{
+  background:var(--teal-800); color:#fff; border:none; padding:14px 30px; border-radius:12px;
+  font-size:15px; font-weight:600; cursor:pointer; font-family:'Hind Siliguri',sans-serif;
+  transition:background .15s, transform .1s; display:flex; align-items:center; gap:8px;
+}
+.btn-primary:hover{background:var(--teal-900);}
+.btn-primary:active{transform:scale(0.98);}
+.btn-primary:disabled{background:#B9C4C0; cursor:not-allowed;}
+.error-note{color:var(--coral); font-size:13px; margin-top:10px; text-align:right; display:none;}
+
+/* ---------------- TICKET / RESULT ---------------- */
+#resultSection{display:none;}
+.ticket-outer{display:flex; justify-content:center;}
+#ticket{
+  width:100%; max-width:520px; background:#fff; border-radius:20px; overflow:hidden;
+  box-shadow:var(--shadow); border:1px solid var(--line);
+}
+.ticket-head{
+  background:linear-gradient(135deg, var(--teal-900), var(--teal-700));
+  color:#fff; padding:24px 26px 20px; position:relative;
+}
+.ticket-head .th-top{display:flex; justify-content:space-between; align-items:flex-start;}
+.ticket-head h4{font-family:'Fraunces',serif; font-size:19px; font-weight:600;}
+.ticket-head .th-sub{font-size:11.5px; opacity:0.8; margin-top:2px;}
+.serial-chip{
+  background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.35);
+  padding:6px 12px; border-radius:8px; text-align:right;
+}
+.serial-chip .s-label{font-size:9.5px; opacity:0.8; letter-spacing:0.5px;}
+.serial-chip .s-val{font-family:'Fraunces',serif; font-size:15px; font-weight:700;}
+.ticket-perf{
+  height:0; border-top:2px dashed rgba(255,255,255,0.4); margin-top:18px;
+}
+.ticket-body{padding:22px 26px;}
+.tk-row{display:flex; justify-content:space-between; padding:9px 0; font-size:13.5px; border-bottom:1px solid #F0F3F2;}
+.tk-row:last-child{border-bottom:none;}
+.tk-row .k{color:var(--ink-soft);}
+.tk-row .v{font-weight:600; color:var(--ink); text-align:right;}
+.tk-highlight{
+  margin-top:16px; background:var(--mint-100); border-radius:12px; padding:16px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.tk-highlight .hh-label{font-size:11.5px; color:var(--teal-700); font-weight:700;}
+.tk-highlight .hh-val{font-family:'Fraunces',serif; font-size:22px; color:var(--teal-900); font-weight:700; margin-top:3px;}
+.tk-fee{text-align:right;}
+.tk-fee .f-label{font-size:11px; color:var(--ink-soft);}
+.tk-fee .f-val{font-family:'Fraunces',serif; font-size:20px; color:var(--amber-600); font-weight:700;}
+.ticket-foot{
+  padding:14px 26px 20px; text-align:center; font-size:10.5px; color:var(--ink-soft); line-height:1.7;
+  border-top:1px dashed var(--line);
+}
+.ticket-foot b{color:var(--teal-800);}
+
+.result-actions{display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap;}
+.btn-secondary{
+  background:#fff; color:var(--teal-800); border:1.5px solid var(--teal-700); padding:12px 22px; border-radius:12px;
+  font-weight:600; font-size:14px; cursor:pointer; font-family:'Hind Siliguri',sans-serif;
+}
+.btn-secondary:hover{background:var(--mint-100);}
+.btn-download{
+  background:var(--amber-500); color:#3A2500; border:none; padding:12px 22px; border-radius:12px;
+  font-weight:700; font-size:14px; cursor:pointer; font-family:'Hind Siliguri',sans-serif;
+}
+.btn-download:hover{background:var(--amber-600); color:#fff;}
+
+.demo-note{
+  text-align:center; font-size:12px; color:var(--ink-soft); margin-top:26px; padding:0 20px;
+}
+.sync-toast{
+  position:fixed; bottom:26px; left:50%; transform:translateX(-50%); background:var(--teal-900); color:#fff;
+  padding:12px 22px; border-radius:10px; font-size:13.5px; box-shadow:var(--shadow); z-index:100; display:none;
+}
+.sync-toast.show{display:block;}
+.no-doctor-note{
+  padding:16px; border:1.5px dashed var(--line); border-radius:12px; font-size:13.5px; color:var(--ink-soft); text-align:center;
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand-row">
+    <div class="brand">
+      <div class="mark">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2 C7 2 3 6 3 11 C3 17 12 22 12 22 C12 22 21 17 21 11 C21 6 17 2 12 2 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.08)"/>
+          <path d="M7 12 h3 l1.5 -3 l2 6 l1.5 -3 h3" stroke="#F0A202" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1>XYZ DIAGNOSTIC CENTER</h1>
+        <div class="tag">নির্ভুল পরীক্ষা • অভিজ্ঞ ডাক্তার • দ্রুত রিপোর্ট</div>
+      </div>
+    </div>
+    <div class="badge-row">
+      <span>🕐 প্রতিদিন সকাল ৮টা – রাত ১০টা</span>
+      <span>📍 ঢাকা</span>
+    </div>
+  </div>
+  <div class="hero-text">
+    <h2>ডাক্তার অ্যাপয়েন্টমেন্ট বুক করুন কয়েক মিনিটে</h2>
+    <p>পছন্দের বিশেষজ্ঞ ডাক্তার বেছে নিন, খালি স্লট দেখুন, আর নিশ্চিত সিরিয়াল নিয়ে যান — সহজ ও ঝামেলাহীন।</p>
+  </div>
+  <div class="ecg-wrap">
+    <svg viewBox="0 0 1080 64" preserveAspectRatio="none" width="100%" height="64">
+      <polyline class="ecg-line" points="0,32 120,32 150,32 165,10 180,54 195,20 210,32 340,32 370,32 385,14 400,50 415,24 430,32 560,32 590,32 605,10 620,54 635,20 650,32 780,32 810,32 825,14 840,50 855,24 870,32 1080,32"/>
+    </svg>
+  </div>
+</header>
+
+<main>
+
+  <!-- STEP 1: PATIENT INFO -->
+  <section class="panel">
+    <h3><span class="step-num">১</span> রোগীর তথ্য</h3>
+    <p class="sub">অ্যাপয়েন্টমেন্ট স্লিপে এই তথ্য প্রিন্ট হবে, তাই সঠিকভাবে পূরণ করুন।</p>
+    <div class="grid-2">
+      <div class="field">
+        <label>রোগীর নাম</label>
+        <input type="text" id="pName" placeholder="যেমনঃ মেহরাব হোসেন">
+      </div>
+      <div class="field">
+        <label>বয়স</label>
+        <input type="number" id="pAge" placeholder="যেমনঃ ২৯" min="0" max="120">
+      </div>
+    </div>
+    <div class="field" style="margin-top:18px; max-width:340px;">
+      <label>ফোন নম্বর</label>
+      <input type="tel" id="pPhone" placeholder="01XXXXXXXXX">
+    </div>
+    <div class="field" style="margin-top:18px;">
+      <label>লিঙ্গ</label>
+      <div class="gender-row" id="genderRow">
+        <label class="gender-opt" data-val="Male">
+          <input type="radio" name="gender" value="Male"> পুরুষ
+        </label>
+        <label class="gender-opt" data-val="Female">
+          <input type="radio" name="gender" value="Female"> মহিলা
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 2: DOCTOR SELECT -->
+  <section class="panel">
+    <h3><span class="step-num">২</span> ডাক্তার নির্বাচন করুন</h3>
+    <p class="sub">বিশেষজ্ঞতা, বসার দিন ও সময় দেখে পছন্দমতো ডাক্তার বেছে নিন।</p>
+    <div class="doctor-grid" id="doctorGrid"></div>
+  </section>
+
+  <!-- STEP 3: DATE + SLOT -->
+  <section class="panel">
+    <h3><span class="step-num">৩</span> তারিখ ও স্লট</h3>
+    <p class="sub">কোন দিন দেখাতে চান বেছে নিন, তারপর সিস্টেম নিজে থেকে খালি স্লট চেক করবে।</p>
+    <div class="field" style="max-width:260px;">
+      <label>ভিজিটের তারিখ</label>
+      <input type="date" id="pDate">
+    </div>
+    <div class="slot-status" id="slotStatus" style="display:none;"></div>
+  </section>
+
+  <!-- STEP 4: VISIT TYPE -->
+  <section class="panel">
+    <h3><span class="step-num">৪</span> ভিজিটের ধরন</h3>
+    <p class="sub">প্রতিটি ডাক্তারের ভিজিট ফি আলাদা — তাই আগে ডাক্তার নির্বাচন করুন।</p>
+    <div class="visit-grid" id="visitGrid"></div>
+  </section>
+
+  <!-- STEP 5: SUBMIT -->
+  <section class="panel">
+    <h3><span class="step-num">৫</span> নিশ্চিত করুন</h3>
+    <p class="sub">সব তথ্য ঠিক থাকলে সাবমিট করুন, সিরিয়াল নম্বর সাথে সাথে দেখতে পাবেন।</p>
+    <div class="submit-row">
+      <button class="btn-primary" id="submitBtn">✔ অ্যাপয়েন্টমেন্ট কনফার্ম করুন</button>
+    </div>
+    <div class="error-note" id="errorNote"></div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="panel" id="resultSection">
+    <h3 style="justify-content:center; margin-bottom:20px;">🎉 অ্যাপয়েন্টমেন্ট কনফার্ম হয়েছে</h3>
+    <div class="ticket-outer">
+      <div id="ticket">
+        <div class="ticket-head">
+          <div class="th-top">
+            <div>
+              <h4>XYZ DIAGNOSTIC CENTER</h4>
+              <div class="th-sub">Appointment Confirmation Slip</div>
+            </div>
+            <div class="serial-chip">
+              <div class="s-label">SERIAL NO.</div>
+              <div class="s-val" id="tkSerial">—</div>
+            </div>
+          </div>
+          <div class="ticket-perf"></div>
+        </div>
+        <div class="ticket-body">
+          <div class="tk-row"><span class="k">রোগীর নাম</span><span class="v" id="tkName">—</span></div>
+          <div class="tk-row"><span class="k">বয়স / লিঙ্গ</span><span class="v" id="tkAgeGender">—</span></div>
+          <div class="tk-row"><span class="k">ডাক্তার</span><span class="v" id="tkDoctor">—</span></div>
+          <div class="tk-row"><span class="k">বিশেষজ্ঞতা</span><span class="v" id="tkSpec">—</span></div>
+          <div class="tk-row"><span class="k">ভিজিটের ধরন</span><span class="v" id="tkVisitType">—</span></div>
+          <div class="tk-row"><span class="k">তারিখ</span><span class="v" id="tkDate">—</span></div>
+
+          <div class="tk-highlight">
+            <div>
+              <div class="hh-label">আনুমানিক সময়</div>
+              <div class="hh-val" id="tkTime">—</div>
+            </div>
+            <div class="tk-fee">
+              <div class="f-label">ভিজিট ফি</div>
+              <div class="f-val" id="tkFee">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="ticket-foot">
+          অনুগ্রহ করে অ্যাপয়েন্টমেন্টের <b>১৫ মিনিট আগে</b> রিসেপশনে সিরিয়াল স্লিপ দেখান।<br>
+          <b>XYZ Diagnostic Center</b>
+        </div>
+      </div>
+    </div>
+    <div class="result-actions">
+      <button class="btn-download" id="downloadBtn">⬇ PNG আকারে ডাউনলোড করুন</button>
+      <button class="btn-secondary" id="newBtn">↺ নতুন অ্যাপয়েন্টমেন্ট</button>
+    </div>
+  </section>
+
+  <p class="demo-note">এটি একটি ডেমো ভার্সন — ডাক্তার, সময়সূচি ও ফি সব উদাহরণ হিসেবে দেওয়া। আসল তথ্য দিলে এটাকে পুরোপুরি কাস্টমাইজ করে দেওয়া হবে।</p>
+</main>
+
+<div class="sync-toast" id="syncToast"></div>
+
+<script>
+/* ---------------- HELPERS ---------------- */
+function toBn(num){
+  const map = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
+  return String(num).split('').map(ch=>map[ch] !== undefined ? map[ch] : ch).join('');
+}
+
+/* ---------------- DEMO DATA ---------------- */
+const DAY_NAMES = ["রবি","সোম","মঙ্গল","বুধ","বৃহস্পতি","শুক্র","শনি"];
+const DAY_SHORT = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+function avatarSVG(color, iconPath){
+  return `<svg viewBox="0 0 64 64" width="64" height="64">
+    <circle cx="32" cy="32" r="31" fill="${color}22"/>
+    <circle cx="32" cy="32" r="31" fill="none" stroke="${color}" stroke-width="1.4"/>
+    <circle cx="32" cy="25" r="10" fill="${color}"/>
+    <path d="M14 54 C14 40 50 40 50 54" fill="${color}"/>
+    <g transform="translate(20,20) scale(0.9)">${iconPath}</g>
+  </svg>`;
+}
+
+const ICONS = {
+  heart: `<path d="M13 26 C4 20 4 10 12 8 C16 7 19 9 20 12 C21 9 24 7 28 8 C36 10 36 20 27 26 L20 32 Z" fill="#fff" opacity="0.9"/>`,
+  bone: `<path d="M8 18 a4 4 0 1 1 6 -4 l16 16 a4 4 0 1 1 -6 4 Z" fill="#fff" opacity="0.9"/>`,
+  baby: `<circle cx="20" cy="14" r="8" fill="#fff" opacity="0.9"/><path d="M8 34 C8 24 32 24 32 34" fill="#fff" opacity="0.9"/>`,
+  skin: `<circle cx="14" cy="14" r="5" fill="#fff" opacity="0.85"/><circle cx="26" cy="20" r="7" fill="#fff" opacity="0.7"/><circle cx="16" cy="28" r="4" fill="#fff" opacity="0.6"/>`,
+  stethoscope: `<path d="M10 6 v10 a8 8 0 0 0 16 0 V6" fill="none" stroke="#fff" stroke-width="2.4" opacity="0.9"/><circle cx="30" cy="26" r="4" fill="#fff" opacity="0.9"/>`
+};
+
+const STORAGE_KEY_DOCTORS = 'xyzdc_doctors';
+const STORAGE_KEY_VISITS = 'xyzdc_visitTypes';
+
+const DEFAULT_DOCTORS = [
+  {
+    id:"kamal", name:"ডা. কামাল হোসেন", nameEn:"Dr. Kamal Hossain",
+    specBn:"মেডিসিন বিশেষজ্ঞ", specEn:"Medicine Specialist",
+    qualif:"MBBS, MD (Medicine)", color:"#1C8A7A", icon:"stethoscope", photo:"",
+    days:[0,1,2,3], time:"বিকাল ৫টা – রাত ৯টা", startHour:17, endHour:21, capacity:20,
+    fees:{new:600, followup:400, report:300}
+  },
+  {
+    id:"nusrat", name:"ডা. নুসরাত জাহান", nameEn:"Dr. Nusrat Jahan",
+    specBn:"গাইনী বিশেষজ্ঞ", specEn:"Gynecologist",
+    qualif:"MBBS, FCPS (Gynae)", color:"#C6558B", icon:"baby", photo:"",
+    days:[1,3,5], time:"সকাল ১০টা – দুপুর ২টা", startHour:10, endHour:14, capacity:15,
+    fees:{new:800, followup:500, report:350}
+  },
+  {
+    id:"rafiq", name:"ডা. রফিকুল ইসলাম", nameEn:"Dr. Rafiqul Islam",
+    specBn:"হৃদরোগ বিশেষজ্ঞ", specEn:"Cardiologist",
+    qualif:"MBBS, MD (Cardiology)", color:"#D4534A", icon:"heart", photo:"",
+    days:[0,2,4], time:"সন্ধ্যা ৬টা – রাত ৯টা", startHour:18, endHour:21, capacity:12,
+    fees:{new:1000, followup:600, report:400}
+  },
+  {
+    id:"sabrina", name:"ডা. সাবরিনা আক্তার", nameEn:"Dr. Sabrina Akter",
+    specBn:"চর্ম ও যৌন রোগ বিশেষজ্ঞ", specEn:"Dermatologist",
+    qualif:"MBBS, DDV (Skin)", color:"#B98A2E", icon:"skin", photo:"",
+    days:[2,3,5,6], time:"দুপুর ৩টা – সন্ধ্যা ৭টা", startHour:15, endHour:19, capacity:18,
+    fees:{new:700, followup:450, report:300}
+  },
+  {
+    id:"imran", name:"ডা. ইমরান চৌধুরী", nameEn:"Dr. Imran Chowdhury",
+    specBn:"অর্থোপেডিক বিশেষজ্ঞ", specEn:"Orthopedic Surgeon",
+    qualif:"MBBS, MS (Ortho)", color:"#3F6FA8", icon:"bone", photo:"",
+    days:[0,1,4,6], time:"সকাল ৯টা – দুপুর ১টা", startHour:9, endHour:13, capacity:16,
+    fees:{new:750, followup:450, report:300}
+  }
+];
+
+const DEFAULT_VISIT_TYPES = [
+  {id:"new", title:"১ম ভিজিট", desc:"নতুন রোগী হিসেবে প্রথমবার দেখাবেন", fee:600},
+  {id:"followup", title:"২য় ভিজিট (ফলো-আপ)", desc:"আগে দেখানো রোগীর পুনরায় ভিজিট", fee:400},
+  {id:"report", title:"রিপোর্ট দেখানো", desc:"টেস্ট রিপোর্ট নিয়ে পরামর্শ", fee:300},
+];
+
+function normalizeDoctors(arr, visitTypesRef){
+  arr.forEach(doc=>{
+    if(!doc.fees || typeof doc.fees !== 'object'){
+      doc.fees = {};
+      visitTypesRef.forEach(vt=>{ doc.fees[vt.id] = vt.fee; });
+    }
+  });
+  return arr;
+}
+
+function loadDoctors(vtRef){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY_DOCTORS);
+    if(raw){ const parsed = JSON.parse(raw); if(Array.isArray(parsed) && parsed.length) return normalizeDoctors(parsed, vtRef); }
+  }catch(e){ console.warn('doctor load failed, using defaults', e); }
+  return normalizeDoctors(JSON.parse(JSON.stringify(DEFAULT_DOCTORS)), vtRef);
+}
+function loadVisitTypes(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY_VISITS);
+    if(raw){ const parsed = JSON.parse(raw); if(Array.isArray(parsed) && parsed.length) return parsed; }
+  }catch(e){ console.warn('visit type load failed, using defaults', e); }
+  return JSON.parse(JSON.stringify(DEFAULT_VISIT_TYPES));
+}
+
+let VISIT_TYPES = loadVisitTypes();
+let DOCTORS = loadDoctors(VISIT_TYPES);
+
+/* ---------------- STATE ---------------- */
+let selectedDoctor = null;
+let selectedVisit = null;
+let selectedGender = null;
+let slotInfo = null; // {available, capacity, booked, serialIndex}
+
+/* ---------------- RENDER: DOCTORS ---------------- */
+const doctorGrid = document.getElementById('doctorGrid');
+
+function renderDoctorGrid(){
+  doctorGrid.innerHTML = '';
+  DOCTORS.forEach(doc=>{
+    const card = document.createElement('div');
+    card.className = 'doc-card';
+    card.dataset.id = doc.id;
+    if(selectedDoctor && selectedDoctor.id === doc.id) card.classList.add('selected');
+    const dayList = doc.days.map(d=>DAY_NAMES[d]).join(', ');
+    const avatarHtml = doc.photo
+      ? `<img src="${doc.photo}" class="doc-avatar" style="object-fit:cover;">`
+      : `<div class="doc-avatar">${avatarSVG(doc.color, ICONS[doc.icon] || ICONS.stethoscope)}</div>`;
+    card.innerHTML = `
+      ${avatarHtml}
+      <div class="doc-name">${doc.name}</div>
+      <div class="doc-spec">${doc.specBn}</div>
+      <div class="doc-meta">
+        <div><b>${doc.qualif}</b></div>
+        <div>বসেন: ${dayList}</div>
+        <div>সময়: ${doc.time}</div>
+      </div>
+    `;
+    doctorGrid.appendChild(card);
+  });
+}
+doctorGrid.addEventListener('click', (e)=>{
+  const card = e.target.closest('.doc-card');
+  if(card) selectDoctor(card.dataset.id);
+});
+
+function selectDoctor(id){
+  selectedDoctor = DOCTORS.find(d=>d.id===id) || null;
+  document.querySelectorAll('.doc-card').forEach(c=>{
+    c.classList.toggle('selected', c.dataset.id===id);
+  });
+  selectedVisit = null;
+  renderVisitGrid();
+  evaluateSlot();
+}
+
+/* ---------------- RENDER: VISIT TYPES (doctor-specific fees) ---------------- */
+const visitGrid = document.getElementById('visitGrid');
+
+function feeFor(doctor, vt){
+  if(doctor && doctor.fees && doctor.fees[vt.id] !== undefined) return doctor.fees[vt.id];
+  return vt.fee;
+}
+
+function renderVisitGrid(){
+  visitGrid.innerHTML = '';
+  if(!selectedDoctor){
+    visitGrid.innerHTML = '<div class="no-doctor-note">👆 প্রথমে উপরে থেকে একজন ডাক্তার নির্বাচন করুন, তারপর সেই ডাক্তারের ভিজিট ফি এখানে দেখা যাবে।</div>';
+    return;
+  }
+  VISIT_TYPES.forEach(vt=>{
+    const fee = feeFor(selectedDoctor, vt);
+    const opt = document.createElement('div');
+    opt.className = 'visit-opt';
+    opt.dataset.id = vt.id;
+    if(selectedVisit && selectedVisit.id === vt.id) opt.classList.add('selected');
+    opt.innerHTML = `
+      <div class="vt-title">${vt.title}</div>
+      <div class="vt-desc">${vt.desc}</div>
+      <div class="vt-price">৳${toBn(fee)}</div>
+    `;
+    visitGrid.appendChild(opt);
+  });
+}
+visitGrid.addEventListener('click', (e)=>{
+  const opt = e.target.closest('.visit-opt');
+  if(!opt || !selectedDoctor) return;
+  const vt = VISIT_TYPES.find(v=>v.id===opt.dataset.id);
+  selectedVisit = { id:vt.id, title:vt.title, desc:vt.desc, fee: feeFor(selectedDoctor, vt) };
+  document.querySelectorAll('.visit-opt').forEach(o=>o.classList.toggle('selected', o.dataset.id===vt.id));
+});
+
+renderDoctorGrid();
+renderVisitGrid();
+
+/* ---------------- GENDER ---------------- */
+document.querySelectorAll('.gender-opt').forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    selectedGender = opt.dataset.val;
+    document.querySelectorAll('.gender-opt').forEach(o=>o.classList.toggle('active', o===opt));
+    opt.querySelector('input').checked = true;
+  });
+});
+
+/* ---------------- DATE / SLOT LOGIC ---------------- */
+const dateInput = document.getElementById('pDate');
+const today = new Date();
+dateInput.min = today.toISOString().split('T')[0];
+dateInput.addEventListener('change', evaluateSlot);
+
+// deterministic pseudo-random booked count based on doctor+date, so it stays stable
+function seededRandom(str){
+  let h = 0;
+  for(let i=0;i<str.length;i++){ h = (Math.imul(31,h) + str.charCodeAt(i)) | 0; }
+  return Math.abs(h % 1000) / 1000;
+}
+
+function evaluateSlot(){
+  const statusBox = document.getElementById('slotStatus');
+  if(!selectedDoctor || !dateInput.value){
+    statusBox.style.display='none';
+    slotInfo = null;
+    return;
+  }
+  const dateObj = new Date(dateInput.value + "T00:00:00");
+  const weekday = dateObj.getDay();
+  statusBox.style.display='flex';
+
+  if(!selectedDoctor.days.includes(weekday)){
+    const dayList = selectedDoctor.days.map(d=>DAY_NAMES[d]).join(', ');
+    statusBox.className = 'slot-status bad';
+    statusBox.innerHTML = `<div class="dot bad"></div><div>এই দিনে <b>${selectedDoctor.name}</b> বসেন না। উনি বসেন: <b>${dayList}</b>।</div>`;
+    slotInfo = null;
+    return;
+  }
+
+  const seed = seededRandom(selectedDoctor.id + dateInput.value);
+  const booked = Math.floor(seed * (selectedDoctor.capacity - 1)); // leave at least 1 open normally
+  const remaining = selectedDoctor.capacity - booked;
+
+  if(remaining <= 0){
+    statusBox.className = 'slot-status bad';
+    statusBox.innerHTML = `<div class="dot bad"></div><div>দুঃখিত, <b>${selectedDoctor.name}</b>-এর আজকের সব স্লট (${selectedDoctor.capacity}টি) ফুল হয়ে গেছে। অন্য তারিখ বেছে নিন।</div>`;
+    slotInfo = null;
+  } else {
+    statusBox.className = 'slot-status ok';
+    statusBox.innerHTML = `<div class="dot ok"></div><div><b>${remaining}টি</b> স্লট খালি আছে (মোট ${selectedDoctor.capacity}টির মধ্যে ${booked}টি বুক হয়ে গেছে)।</div>`;
+    slotInfo = {available:true, capacity:selectedDoctor.capacity, booked:booked, serialIndex:booked+1};
+  }
+}
+
+/* ---------------- SUBMIT ---------------- */
+document.getElementById('submitBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('pName').value.trim();
+  const age = document.getElementById('pAge').value.trim();
+  const phone = document.getElementById('pPhone').value.trim();
+  const errBox = document.getElementById('errorNote');
+
+  const problems = [];
+  if(!name) problems.push('রোগীর নাম');
+  if(!age) problems.push('বয়স');
+  if(!phone) problems.push('ফোন নম্বর');
+  if(!selectedGender) problems.push('লিঙ্গ');
+  if(!selectedDoctor) problems.push('ডাক্তার');
+  if(!dateInput.value) problems.push('তারিখ');
+  if(!slotInfo) problems.push('খালি স্লট (তারিখ/ডাক্তার আবার চেক করুন)');
+  if(!selectedVisit) problems.push('ভিজিটের ধরন');
+
+  if(problems.length){
+    errBox.style.display='block';
+    errBox.textContent = 'অনুগ্রহ করে পূরণ করুন: ' + problems.join(', ');
+    return;
+  }
+  errBox.style.display='none';
+
+  buildTicket(name, age, phone);
+  syncBookingToDoctorPortal(name, age, phone);
+  document.getElementById('resultSection').style.display='block';
+  document.getElementById('resultSection').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ---------------- SYNC BOOKING TO DOCTOR PORTAL ---------------- */
+const STORAGE_KEY_PATIENTS = 'xyzdc_patients';
+
+function loadPortalPatients(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY_PATIENTS); if(raw){ const p = JSON.parse(raw); if(Array.isArray(p)) return p; } }catch(e){}
+  return [];
+}
+function savePortalPatients(arr){ localStorage.setItem(STORAGE_KEY_PATIENTS, JSON.stringify(arr)); }
+
+function syncBookingToDoctorPortal(name, age, phone){
+  const dateVal = dateInput.value;
+  const patients = loadPortalPatients();
+
+  // match an existing patient of this doctor by phone (or by name if phone somehow blank)
+  let patient = patients.find(p => p.doctorId === selectedDoctor.id && phone && p.phone === phone);
+  if(!patient){
+    patient = patients.find(p => p.doctorId === selectedDoctor.id && !phone && p.name.trim().toLowerCase() === name.trim().toLowerCase());
+  }
+  if(!patient){
+    patient = { id:'PT-'+Date.now().toString(36).toUpperCase(), name, age, gender:selectedGender, phone, address:'', doctorId:selectedDoctor.id, visits: [] };
+    patients.push(patient);
+  } else {
+    patient.name = name; patient.age = age; patient.gender = selectedGender; patient.phone = phone;
+  }
+
+  const d = new Date(dateVal + "T00:00:00");
+  const dateISO = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+
+  patient.visits.push({
+    visitId: 'V-'+Date.now().toString(36),
+    dateISO, date: formatDateBn(dateVal),
+    feeType: selectedVisit.id, fee: selectedVisit.fee,
+    notes: '', // the doctor can add notes directly on the auto-generated prescription in their portal
+    attendance: 'pending', // doctor marks উপস্থিত/অনুপস্থিত in the portal
+    serial: toBn(slotInfo.serialIndex)
+  });
+
+  savePortalPatients(patients);
+}
+
+function formatDateBn(dateStr){
+  const d = new Date(dateStr + "T00:00:00");
+  const months = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+  return `${d.getDate()} ${months[d.getMonth()]}, ${d.getFullYear()} (${DAY_NAMES[d.getDay()]}বার)`;
+}
+
+function estimateTime(doctor, serialIndex){
+  const startHour = (typeof doctor.startHour === 'number') ? doctor.startHour : 10;
+  const avgMinutesPerPatient = 12;
+  let totalMinutes = (serialIndex-1) * avgMinutesPerPatient;
+  let hour = startHour + Math.floor(totalMinutes/60);
+  let minute = totalMinutes % 60;
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  let displayHour = hour % 12; if(displayHour===0) displayHour=12;
+  return `${displayHour}:${minute.toString().padStart(2,'0')} ${ampm}`;
+}
+
+function buildTicket(name, age, phone){
+  const dateVal = dateInput.value;
+  const serial = toBn(slotInfo.serialIndex);
+
+  document.getElementById('tkSerial').textContent = serial;
+  document.getElementById('tkName').textContent = name;
+  document.getElementById('tkAgeGender').textContent = `${toBn(age)} বছর / ${selectedGender==='Male' ? 'পুরুষ' : 'মহিলা'}`;
+  document.getElementById('tkDoctor').textContent = selectedDoctor.name;
+  document.getElementById('tkSpec').textContent = selectedDoctor.specBn;
+  document.getElementById('tkVisitType').textContent = selectedVisit.title;
+  document.getElementById('tkDate').textContent = formatDateBn(dateVal);
+  document.getElementById('tkTime').textContent = estimateTime(selectedDoctor, slotInfo.serialIndex);
+  document.getElementById('tkFee').textContent = `৳${toBn(selectedVisit.fee)}`;
+}
+
+/* ---------------- DOWNLOAD PNG ---------------- */
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const btn = document.getElementById('downloadBtn');
+  const ticket = document.getElementById('ticket');
+
+  if(typeof html2canvas === 'undefined'){
+    alert('ছবি তৈরির লাইব্রেরি লোড হয়নি — ইন্টারনেট কানেকশন চেক করে পেজটি রিলোড করুন।');
+    return;
+  }
+
+  const originalLabel = btn.textContent;
+  btn.textContent = '⏳ তৈরি হচ্ছে...';
+  btn.disabled = true;
+
+  html2canvas(ticket, {
+    scale:3,
+    backgroundColor:'#ffffff',
+    useCORS:true,
+    allowTaint:false,
+    logging:false
+  }).then(canvas=>{
+    canvas.toBlob(function(blob){
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = `XYZ-Appointment-Serial-${document.getElementById('tkSerial').textContent}.png`;
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(()=>URL.revokeObjectURL(url), 3000);
+      btn.textContent = originalLabel;
+      btn.disabled = false;
+    }, 'image/png');
+  }).catch(err=>{
+    console.error('PNG export failed:', err);
+    btn.textContent = originalLabel;
+    btn.disabled = false;
+    alert('দুঃখিত, ছবি তৈরি করতে সমস্যা হয়েছে। আরেকবার চেষ্টা করুন, অথবা স্ক্রিনশট নিয়ে নিন।');
+  });
+});
+
+document.getElementById('newBtn').addEventListener('click', ()=>{
+  window.scrollTo({top:0, behavior:'smooth'});
+  setTimeout(()=>location.reload(), 400);
+});
+
+/* ---------------- LIVE SYNC WITH ADMIN PANEL ---------------- */
+function showSyncToast(msg){
+  const t = document.getElementById('syncToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+function refreshFromStorage(showMsg){
+  VISIT_TYPES = loadVisitTypes();
+  DOCTORS = loadDoctors(VISIT_TYPES);
+
+  const prevDoctorId = selectedDoctor ? selectedDoctor.id : null;
+  selectedDoctor = prevDoctorId ? (DOCTORS.find(d=>d.id===prevDoctorId) || null) : null;
+  if(!selectedDoctor) selectedVisit = null;
+  else if(selectedVisit){
+    const vt = VISIT_TYPES.find(v=>v.id===selectedVisit.id);
+    selectedVisit = vt ? { id:vt.id, title:vt.title, desc:vt.desc, fee: feeFor(selectedDoctor, vt) } : null;
+  }
+
+  renderDoctorGrid();
+  renderVisitGrid();
+  evaluateSlot();
+
+  if(showMsg) showSyncToast('✓ সর্বশেষ ডাক্তার ও ফি এর তথ্য লোড হয়েছে');
+}
+
+// auto-update when admin panel changes localStorage in another tab
+window.addEventListener('storage', (e)=>{
+  if(e.key === STORAGE_KEY_DOCTORS || e.key === STORAGE_KEY_VISITS || e.key === null){
+    refreshFromStorage(true);
+  }
+});
+
+// manual fallback button removed from UI; auto-sync still runs via storage event and focus below
+
+// also refresh whenever the tab regains focus (covers browsers where the storage event is unreliable)
+window.addEventListener('focus', ()=>refreshFromStorage(false));
+
+</script>
+</body>
+</html>
