@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XYZ Diagnostic Center — মালিক ড্যাশবোর্ড</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+<style>
+:root{
+  --bg:#F6F8F7; --surface:#FFFFFF; --ink:#16231F; --ink-soft:#4B5A55;
+  --teal-900:#0B3D3A; --teal-800:#0F4A45; --teal-700:#135E56; --teal-500:#1C8A7A;
+  --mint-100:#E4F1EC; --mint-200:#D3E7DF;
+  --amber-500:#F0A202; --amber-600:#D48A00;
+  --coral:#E8542E; --coral-bg:#FDEEEA;
+  --line:#DCE6E2; --shadow:0 10px 34px rgba(11,61,58,0.10);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{background:var(--bg); color:var(--ink); font-family:'Hind Siliguri',sans-serif; min-height:100vh; padding-bottom:70px;}
+img,svg{display:block;}
+
+header.top{
+  background:linear-gradient(135deg, var(--teal-900), var(--teal-700) 65%, var(--teal-500));
+  color:#fff; padding:30px 24px 50px; position:relative; overflow:hidden;
+}
+.top-inner{max-width:1080px; margin:0 auto; position:relative; z-index:2;}
+.brand-row{display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+.brand{display:flex; align-items:center; gap:12px;}
+.brand .mark{width:48px;height:48px;border-radius:13px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.35); display:flex; align-items:center; justify-content:center; font-size:22px;}
+.brand h1{font-family:'Fraunces',serif; font-weight:600; font-size:23px;}
+.brand .tag{font-size:12px; opacity:0.85;}
+.ecg-wrap{position:absolute; left:0; right:0; bottom:-2px; height:56px; z-index:1; opacity:0.85;}
+.ecg-line{stroke:#ffffff; stroke-width:2; fill:none; opacity:0.5; stroke-dasharray:1400; stroke-dashoffset:1400; animation:draw 3.2s ease-out forwards;}
+@keyframes draw{ to{ stroke-dashoffset:0; } }
+
+main{max-width:1080px; margin:-30px auto 0; padding:0 20px; position:relative; z-index:3;}
+
+/* ---------- SUMMARY CARDS ---------- */
+.summary-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:22px;}
+@media(max-width:800px){.summary-row{grid-template-columns:1fr 1fr;}}
+@media(max-width:460px){.summary-row{grid-template-columns:1fr;}}
+.stat-card{background:var(--surface); border-radius:16px; box-shadow:var(--shadow); border:1px solid var(--line); padding:20px;}
+.stat-card .sc-label{font-size:12px; color:var(--ink-soft); font-weight:600;}
+.stat-card .sc-value{font-family:'Fraunces',serif; font-size:26px; font-weight:700; color:var(--teal-900); margin-top:6px;}
+.stat-card.amber .sc-value{color:var(--amber-600);}
+
+.panel{background:var(--surface); border-radius:18px; box-shadow:var(--shadow); border:1px solid var(--line); padding:26px; margin-bottom:20px;}
+.panel h2{font-family:'Fraunces',serif; font-size:18.5px; font-weight:600; color:var(--teal-900); display:flex; align-items:center; gap:9px;}
+.panel .sub{color:var(--ink-soft); font-size:13.5px; margin-top:5px; margin-bottom:0;}
+
+.search-box{position:relative; margin:18px 0 4px;}
+.search-box input{width:100%; padding:13px 16px 13px 42px; border-radius:12px; border:1.5px solid var(--line); font-family:inherit; font-size:14.5px; background:#FCFDFD;}
+.search-box .si{position:absolute; left:15px; top:50%; transform:translateY(-50%); opacity:0.5;}
+
+.empty-note{text-align:center; color:var(--ink-soft); font-size:13.5px; padding:22px 0;}
+
+/* ---------- DOCTOR CARD ---------- */
+.doctor-card{border:1.5px solid var(--line); border-radius:16px; margin-top:16px; overflow:hidden; background:#FCFDFD;}
+.doctor-card-head{display:flex; align-items:center; gap:14px; padding:16px 18px; cursor:pointer; flex-wrap:wrap;}
+.doctor-card-head:hover{background:var(--mint-100);}
+.dc-avatar{width:56px; height:56px; border-radius:50%; object-fit:cover; background:#eee; flex-shrink:0;}
+.dc-info{flex:1; min-width:180px;}
+.dc-name{font-family:'Fraunces',serif; font-weight:600; font-size:15.5px; color:var(--teal-900);}
+.dc-spec{font-size:12px; color:var(--teal-700); font-weight:600;}
+.dc-stats{display:flex; gap:10px; flex-wrap:wrap;}
+.dc-stat{text-align:right; padding:6px 14px; border-radius:10px; background:var(--mint-100);}
+.dc-stat .ds-label{font-size:10px; color:var(--teal-700); font-weight:700;}
+.dc-stat .ds-value{font-family:'Fraunces',serif; font-size:15px; font-weight:700; color:var(--teal-900);}
+.dc-stat.amber{background:#FFF7E8;}
+.dc-stat.amber .ds-value{color:var(--amber-600);}
+.dc-caret{font-size:18px; color:var(--ink-soft); transition:transform .18s; flex-shrink:0;}
+.doctor-card.open .dc-caret{transform:rotate(180deg);}
+.doctor-card-body{display:none; padding:0 18px 18px; border-top:1px dashed var(--line);}
+.doctor-card.open .doctor-card-body{display:block;}
+
+/* ---------- DATE GROUPS (inside doctor card) ---------- */
+.date-group{border:1.5px solid var(--line); border-radius:12px; padding:14px 16px; margin-top:14px; background:#fff;}
+.date-group-head{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px; padding-bottom:8px; border-bottom:1px dashed var(--line);}
+.date-group-head .dg-date{font-family:'Fraunces',serif; font-weight:700; font-size:14px; color:var(--teal-900);}
+.date-group-head .dg-total{font-size:12px; font-weight:700; color:var(--amber-600); background:#FFF7E8; padding:5px 11px; border-radius:999px;}
+.pt-row{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 0; font-size:12.5px; border-bottom:1px solid #F0F3F2; flex-wrap:wrap;}
+.pt-row:last-child{border-bottom:none;}
+.pt-name{font-weight:700; color:var(--ink);}
+.pt-meta{font-size:11px; color:var(--ink-soft); margin-top:2px;}
+.pt-type{display:inline-block; background:var(--mint-100); color:var(--teal-800); font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:999px; margin-top:3px;}
+.pt-fee{font-family:'Fraunces',serif; color:var(--amber-600); font-weight:700; font-size:13px;}
+.pt-status{font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:8px;}
+.pt-status.present{background:var(--mint-100); color:var(--teal-800);}
+.pt-status.pending{background:#F0F0F0; color:var(--ink-soft);}
+
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand-row">
+      <div class="brand">
+        <div class="mark">🏥</div>
+        <div>
+          <h1>XYZ Diagnostic Center</h1>
+          <div class="tag">মালিক ড্যাশবোর্ড / Owner Dashboard</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ecg-wrap">
+    <svg viewBox="0 0 1080 56" preserveAspectRatio="none" width="100%" height="56">
+      <polyline class="ecg-line" points="0,28 120,28 150,28 165,8 180,48 195,18 210,28 340,28 370,28 385,10 400,46 415,20 430,28 560,28 590,28 605,8 620,48 635,18 650,28 780,28 810,28 825,10 840,46 855,20 870,28 1080,28"/>
+    </svg>
+  </div>
+</header>
+
+<main>
+
+  <!-- SUMMARY -->
+  <div class="summary-row">
+    <div class="stat-card">
+      <div class="sc-label">মোট ডাক্তার</div>
+      <div class="sc-value" id="statDoctors">০</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">মোট রোগী</div>
+      <div class="sc-value" id="statPatients">০</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="sc-label">আজকের আয়</div>
+      <div class="sc-value" id="statTodayIncome">৳০</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="sc-label">সর্বমোট আয়</div>
+      <div class="sc-value" id="statTotalIncome">৳০</div>
+    </div>
+  </div>
+
+  <!-- DOCTOR-WISE BREAKDOWN -->
+  <section class="panel">
+    <h2>🩺 ডাক্তার অনুযায়ী রোগী ও আয়</h2>
+    <p class="sub">প্রতিটি ডাক্তারের কার্ডে ক্লিক করলে তারিখ অনুযায়ী রোগী ও আয়ের বিস্তারিত দেখা যাবে। যেসব রোগীর "আসেনি" নির্বাচন করা হয়েছে তাদের তথ্য এখানে দেখানো হয় না।</p>
+    <div class="search-box">
+      <span class="si">🔎</span>
+      <input type="text" id="searchInput" placeholder="ডাক্তার বা রোগীর নাম দিয়ে খুঁজুন...">
+    </div>
+    <div id="doctorList"></div>
+  </section>
+
+</main>
+
+<script>
+/* ---------------- CONSTANTS ---------------- */
+const STORAGE_KEY_DOCTORS = 'xyzdc_doctors';
+const STORAGE_KEY_VISITS = 'xyzdc_visitTypes';
+const STORAGE_KEY_PATIENTS = 'xyzdc_patients';
+const DAY_NAMES = ["রবি","সোম","মঙ্গল","বুধ","বৃহস্পতি","শুক্র","শনি"];
+const VISIT_TYPES = [
+  {id:'new', title:'১ম ভিজিট'},
+  {id:'followup', title:'ফলো-আপ'},
+  {id:'report', title:'রিপোর্ট দেখানো'}
+];
+function vtLabel(id){ const vt = VISIT_TYPES.find(v=>v.id===id); return vt ? vt.title : id; }
+
+function toBn(num){
+  const map = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
+  return String(num).split('').map(ch=>map[ch] !== undefined ? map[ch] : ch).join('');
+}
+function todayISO(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+const ICONS = {
+  heart: `<path d="M13 26 C4 20 4 10 12 8 C16 7 19 9 20 12 C21 9 24 7 28 8 C36 10 36 20 27 26 L20 32 Z" fill="#fff" opacity="0.9"/>`,
+  bone: `<path d="M8 18 a4 4 0 1 1 6 -4 l16 16 a4 4 0 1 1 -6 4 Z" fill="#fff" opacity="0.9"/>`,
+  baby: `<circle cx="20" cy="14" r="8" fill="#fff" opacity="0.9"/><path d="M8 34 C8 24 32 24 32 34" fill="#fff" opacity="0.9"/>`,
+  skin: `<circle cx="14" cy="14" r="5" fill="#fff" opacity="0.85"/><circle cx="26" cy="20" r="7" fill="#fff" opacity="0.7"/><circle cx="16" cy="28" r="4" fill="#fff" opacity="0.6"/>`,
+  stethoscope: `<path d="M10 6 v10 a8 8 0 0 0 16 0 V6" fill="none" stroke="#fff" stroke-width="2.4" opacity="0.9"/><circle cx="30" cy="26" r="4" fill="#fff" opacity="0.9"/>`
+};
+function avatarSVGDataUri(color, iconKey){
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <circle cx="32" cy="32" r="31" fill="${color}22"/>
+    <circle cx="32" cy="32" r="31" fill="none" stroke="${color}" stroke-width="1.4"/>
+    <circle cx="32" cy="25" r="10" fill="${color}"/>
+    <path d="M14 54 C14 40 50 40 50 54" fill="${color}"/>
+    <g transform="translate(20,20) scale(0.9)">${ICONS[iconKey] || ICONS.stethoscope}</g>
+  </svg>`;
+  return "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg)));
+}
+
+const DEFAULT_DOCTORS = [
+  {id:"kamal", name:"ডা. কামাল হোসেন", specBn:"মেডিসিন বিশেষজ্ঞ", qualif:"MBBS, MD (Medicine)", color:"#1C8A7A", icon:"stethoscope", photo:"", fees:{new:600, followup:400, report:300}},
+  {id:"nusrat", name:"ডা. নুসরাত জাহান", specBn:"গাইনী বিশেষজ্ঞ", qualif:"MBBS, FCPS (Gynae)", color:"#C6558B", icon:"baby", photo:"", fees:{new:800, followup:500, report:350}},
+  {id:"rafiq", name:"ডা. রফিকুল ইসলাম", specBn:"হৃদরোগ বিশেষজ্ঞ", qualif:"MBBS, MD (Cardiology)", color:"#D4534A", icon:"heart", photo:"", fees:{new:1000, followup:600, report:400}},
+  {id:"sabrina", name:"ডা. সাবরিনা আক্তার", specBn:"চর্ম ও যৌন রোগ বিশেষজ্ঞ", qualif:"MBBS, DDV (Skin)", color:"#B98A2E", icon:"skin", photo:"", fees:{new:700, followup:450, report:300}},
+  {id:"imran", name:"ডা. ইমরান চৌধুরী", specBn:"অর্থোপেডিক বিশেষজ্ঞ", qualif:"MBBS, MS (Ortho)", color:"#3F6FA8", icon:"bone", photo:"", fees:{new:750, followup:450, report:300}}
+];
+
+/* ---------------- LOAD DATA (read-only view of shared storage) ---------------- */
+function loadDoctors(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY_DOCTORS); if(raw){ const p = JSON.parse(raw); if(Array.isArray(p) && p.length) return p; } }catch(e){}
+  return DEFAULT_DOCTORS;
+}
+function loadPatients(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY_PATIENTS); if(raw){ const p = JSON.parse(raw); if(Array.isArray(p)) return p; } }catch(e){}
+  return [];
+}
+
+let openDoctorIds = new Set();
+
+function render(){
+  const doctors = loadDoctors();
+  const patients = loadPatients();
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const today = todayISO();
+
+  // ---- summary stats (patients marked 'absent' are excluded everywhere) ----
+  let totalPatientsSet = new Set();
+  let totalIncomeAllTime = 0;
+  let todayIncome = 0;
+
+  patients.forEach(p=>{
+    p.visits.forEach(v=>{
+      if(v.attendance === 'absent') return;
+      totalPatientsSet.add(p.id);
+      if(v.attendance === 'present'){
+        totalIncomeAllTime += (v.fee||0);
+        if(v.dateISO === today) todayIncome += (v.fee||0);
+      }
+    });
+  });
+
+  document.getElementById('statDoctors').textContent = toBn(doctors.length);
+  document.getElementById('statPatients').textContent = toBn(totalPatientsSet.size);
+  document.getElementById('statTodayIncome').textContent = '৳' + toBn(todayIncome);
+  document.getElementById('statTotalIncome').textContent = '৳' + toBn(totalIncomeAllTime);
+
+  // ---- doctor-wise breakdown ----
+  const doctorList = document.getElementById('doctorList');
+
+  const doctorBlocks = doctors.map(doc=>{
+    const docPatients = patients.filter(p=>p.doctorId===doc.id);
+
+    // flatten to visible (non-absent) entries, optionally filtered by search
+    let entries = [];
+    docPatients.forEach(p=>{
+      const matchesDoctor = doc.name.toLowerCase().includes(q) || (doc.specBn||'').toLowerCase().includes(q);
+      const matchesPatient = p.name.toLowerCase().includes(q) || (p.phone||'').includes(q);
+      if(q && !matchesDoctor && !matchesPatient) return;
+      p.visits.forEach(v=>{
+        if(v.attendance === 'absent') return; // hide patients marked as not-come
+        entries.push({patient:p, visit:v});
+      });
+    });
+
+    if(q && !entries.length) return ''; // doctor doesn't match search, skip entirely
+
+    const totalIncome = entries.reduce((s,e)=> s + (e.visit.attendance==='present' ? (e.visit.fee||0) : 0), 0);
+    const patientCount = new Set(entries.map(e=>e.patient.id)).size;
+
+    // group by date, latest first
+    const byDate = {};
+    entries.forEach(e=>{
+      const key = e.visit.dateISO || 'unknown';
+      if(!byDate[key]) byDate[key] = [];
+      byDate[key].push(e);
+    });
+    const dateKeys = Object.keys(byDate).sort((a,b)=> b.localeCompare(a));
+
+    const dateGroupsHtml = dateKeys.length ? dateKeys.map(dateISO=>{
+      const dayEntries = byDate[dateISO];
+      const dayTotal = dayEntries.reduce((s,e)=> s + (e.visit.attendance==='present' ? (e.visit.fee||0) : 0), 0);
+      const rows = dayEntries.map(e=>{
+        const v = e.visit, p = e.patient;
+        const statusHtml = v.attendance === 'present'
+          ? `<span class="pt-status present">✔ উপস্থিত</span>`
+          : `<span class="pt-status pending">⏳ অপেক্ষমাণ</span>`;
+        return `
+          <div class="pt-row">
+            <div>
+              <div class="pt-name">${p.name} ${statusHtml}</div>
+              <div class="pt-meta">${toBn(p.age)} বছর, ${p.gender==='Male'?'পুরুষ':'মহিলা'} • 📞 ${p.phone || 'নেই'}</div>
+              <span class="pt-type">${vtLabel(v.feeType)}</span>
+            </div>
+            <div class="pt-fee">৳${toBn(v.fee||0)}</div>
+          </div>
+        `;
+      }).join('');
+      return `
+        <div class="date-group">
+          <div class="date-group-head">
+            <div class="dg-date">${dayEntries[0].visit.date || dateISO}</div>
+            <div class="dg-total">দিনের আয়ঃ ৳${toBn(dayTotal)}</div>
+          </div>
+          ${rows}
+        </div>
+      `;
+    }).join('') : '<div class="empty-note">এই ডাক্তারের অধীনে এখনো কোনো রোগীর রেকর্ড নেই।</div>';
+
+    const avatarSrc = doc.photo || avatarSVGDataUri(doc.color, doc.icon);
+    const isOpen = openDoctorIds.has(doc.id) || !!q;
+
+    return `
+      <div class="doctor-card ${isOpen ? 'open':''}" data-doctor-id="${doc.id}">
+        <div class="doctor-card-head">
+          <img class="dc-avatar" src="${avatarSrc}">
+          <div class="dc-info">
+            <div class="dc-name">${doc.name}</div>
+            <div class="dc-spec">${doc.specBn}</div>
+          </div>
+          <div class="dc-stats">
+            <div class="dc-stat">
+              <div class="ds-label">রোগী</div>
+              <div class="ds-value">${toBn(patientCount)}</div>
+            </div>
+            <div class="dc-stat amber">
+              <div class="ds-label">মোট আয়</div>
+              <div class="ds-value">৳${toBn(totalIncome)}</div>
+            </div>
+          </div>
+          <div class="dc-caret">▾</div>
+        </div>
+        <div class="doctor-card-body">
+          ${dateGroupsHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  doctorList.innerHTML = doctorBlocks || '<div class="empty-note">কোনো ডাক্তার পাওয়া যায়নি।</div>';
+
+  doctorList.querySelectorAll('.doctor-card-head').forEach(head=>{
+    head.addEventListener('click', ()=>{
+      const card = head.closest('.doctor-card');
+      const id = card.dataset.doctorId;
+      if(openDoctorIds.has(id)){ openDoctorIds.delete(id); card.classList.remove('open'); }
+      else { openDoctorIds.add(id); card.classList.add('open'); }
+    });
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', render);
+
+/* ---------------- INIT + LIVE SYNC ---------------- */
+render();
+
+window.addEventListener('storage', (e)=>{
+  if(e.key === STORAGE_KEY_PATIENTS || e.key === STORAGE_KEY_DOCTORS || e.key === STORAGE_KEY_VISITS){
+    render();
+  }
+});
+window.addEventListener('focus', render);
+</script>
+</body>
+</html>
